@@ -1,0 +1,18 @@
+[2020-11-29 11:59:11,389] {dag_processing.py:839} INFO - Processing files using up to 2 processes at a time 
+[2020-11-29 11:59:11,391] {dag_processing.py:840} INFO - Process each file at most once every 0 seconds
+[2020-11-29 11:59:11,406] {dag_processing.py:842} INFO - Checking for new files in /opt/airflow/dags every 300 seconds
+[2020-11-29 11:59:11,410] {dag_processing.py:1312} INFO - Finding 'running' jobs without a recent heartbeat
+[2020-11-29 11:59:11,413] {dag_processing.py:1316} INFO - Failing jobs without heartbeat after 2020-11-29 11:54:11.412927+00:00
+[2020-11-29 11:59:11,476] {dag_processing.py:1064} INFO - 
+================================================================================
+DAG File Processing Stats
+
+File Path                            PID  Runtime      # DAGs    # Errors  Last Runtime    Last Run
+---------------------------------  -----  ---------  --------  ----------  --------------  ----------
+/opt/airflow/dags/my_first_dag.py    157  0.01s             0           0
+/opt/airflow/dags/orchestrator.py    159  0.01s             0           0
+================================================================================
+[2020-11-29 11:59:21,531] {dag_processing.py:1312} INFO - Finding 'running' jobs without a recent heartbeat
+[2020-11-29 11:59:21,535] {dag_processing.py:1316} INFO - Failing jobs without heartbeat after 2020-11-29 11:54:21.535460+00:00
+[2020-11-29 11:59:25,370] {dag_processing.py:822} INFO - Exiting gracefully upon receiving signal 15
+[2020-11-29 11:59:25,395] {dag_processing.py:1398} INFO - Waiting up to 5 seconds for processes to exit...
