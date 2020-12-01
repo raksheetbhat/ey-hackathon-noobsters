@@ -1,6 +1,8 @@
 from airflow import DAG
 from airflow.operators.dummy_operator import DummyOperator
 
+from operators.data_aggregation_operators import DataAggregator
+
 from datetime import datetime
 import requests
 
@@ -8,15 +10,14 @@ import helper
 
 output = [{
 
-        "task_id" : 1,
-        "task_name" : "EY task",
+        "task_id": 3,
+        "task_name": "EY tasks ",
         "data_sources": ["twitter","facebook","linkedin", "search"],
         "goal": "goal_1",
 },
 {
-
-        "task_id" : 2,
-        "task_name" : "EY task for something",
+        "task_id": 4,
+        "task_name": "EY tasks for something",
         "data_sources": ["linkedin", "search"],
         "goal": "goal_2",
 }]
@@ -37,19 +38,9 @@ def create_dag(task):
                             retries=3,
                             dag=dag)
 
-    data_sources = helper.data_source_translator(task["data_sources"], task["task_id"], dag)
+    operators = helper.construct_dag(task, dag)
 
-    goal_operator = DummyOperator(
-        task_id=task["goal"],
-        retries=3,
-        dag=dag)
-
-    end_operator = DummyOperator(
-        task_id="end_flow",
-        retries=3,
-        dag=dag)
-
-    initiate_operator >> data_sources >> goal_operator >> end_operator
+    initiate_operator >> operators
 
     return dag
 
