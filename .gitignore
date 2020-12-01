@@ -64,7 +64,7 @@ packages/react-devtools-scheduling-profiler/dist
 ./idea/*
 .idea/
 */idea/*
-.__pycache__/
+./__pycache__/
 */__pycache__/*
 ./__pycache__/*
 /__pycache__/

@@ -3,11 +3,10 @@ from airflow.utils.decorators import apply_defaults
 
 import logging
 
-
 log = logging.getLogger(__name__)
 
 
-class TwitterDataCollector(BaseOperator):
+class TwitterDataParser(BaseOperator):
 
     @apply_defaults
     def __init__(self,
@@ -16,17 +15,17 @@ class TwitterDataCollector(BaseOperator):
                  **kwargs):
 
         self.data = data
-        super(TwitterDataCollector, self).__init__(*args, **kwargs)
+        super(TwitterDataParser, self).__init__(*args, **kwargs)
 
     def execute(self, context):
-        log.info('TwitterDataCollector Initiated')
+        log.info('TwitterDataParser Initiated')
         log.info("Some process happens here")
         log.info(self.data)
 
         return "response"
 
 
-class FBDataCollector(BaseOperator):
+class LinkedinDataParser(BaseOperator):
 
     @apply_defaults
     def __init__(self,
@@ -35,17 +34,18 @@ class FBDataCollector(BaseOperator):
                  **kwargs):
 
         self.data = data
-        super(FBDataCollector, self).__init__(*args, **kwargs)
+        super(LinkedinDataParser, self).__init__(*args, **kwargs)
 
     def execute(self, context):
-        log.info('FBDataCollector Initiated')
+        log.info('LinkedinDataParser Initiated')
         log.info("Some process happens here")
         log.info(self.data)
 
         return "response"
 
 
-class LinkedinDataCollector(BaseOperator):
+
+class FBDataParser(BaseOperator):
 
     @apply_defaults
     def __init__(self,
@@ -54,17 +54,17 @@ class LinkedinDataCollector(BaseOperator):
                  **kwargs):
 
         self.data = data
-        super(LinkedinDataCollector, self).__init__(*args, **kwargs)
+        super(FBDataParser, self).__init__(*args, **kwargs)
 
     def execute(self, context):
-        log.info('LinkedinDataCollector Initiated')
+        log.info('FBDataParser Initiated')
         log.info("Some process happens here")
         log.info(self.data)
 
         return "response"
 
 
-class WebDataCollector(BaseOperator):
+class WebDataParser(BaseOperator):
 
     @apply_defaults
     def __init__(self,
@@ -73,17 +73,17 @@ class WebDataCollector(BaseOperator):
                  **kwargs):
 
         self.data = data
-        super(WebDataCollector, self).__init__(*args, **kwargs)
+        super(WebDataParser, self).__init__(*args, **kwargs)
 
     def execute(self, context):
-        log.info('WebDataCollector Initiated')
+        log.info('WebDataParser Initiated')
         log.info("Some process happens here")
         log.info(self.data)
 
         return "response"
 
 
-class SearchDataCollector(BaseOperator):
+class SearchDataParser(BaseOperator):
 
     @apply_defaults
     def __init__(self,
@@ -92,10 +92,29 @@ class SearchDataCollector(BaseOperator):
                  **kwargs):
 
         self.data = data
-        super(SearchDataCollector, self).__init__(*args, **kwargs)
+        super(SearchDataParser, self).__init__(*args, **kwargs)
 
     def execute(self, context):
-        log.info('SearchDataCollector Initiated')
+        log.info('SearchDataParser Initiated')
+        log.info("Some process happens here")
+        log.info(self.data)
+
+        return "response"
+
+
+class NewsDataParser(BaseOperator):
+
+    @apply_defaults
+    def __init__(self,
+                 data,
+                 *args,
+                 **kwargs):
+
+        self.data = data
+        super(NewsDataParser, self).__init__(*args, **kwargs)
+
+    def execute(self, context):
+        log.info('NewsDataParser Initiated')
         log.info("Some process happens here")
         log.info(self.data)
 
