@@ -9,8 +9,8 @@ services:
       - POSTGRES_DB=airflow
 
   webserver:
-    image: apache/airflow
-    entrypoint: ./scripts/entrypoint.sh
+    build: ./airflow
+    entrypoint: ./airflow/scripts/entrypoint_webserver.sh
     deploy:
       replicas: 1
     restart: on-failure:1
@@ -23,12 +23,13 @@ services:
       - ./airflow/logs:/opt/airflow/logs
       - ./airflow/plugins:/opt/airflow/plugins
       - ./airflow/scripts:/opt/airflow/scripts
+      - ./airflow/requirements.txt:/opt/airflow/requirements.txt
     ports:
       - "8080:8080"
 
   scheduler:
-    image: apache/airflow
-    command: scheduler
+    build: ./airflow
+    entrypoint: ./airflow/scripts/entrypoint_scheduler.sh
     restart: on-failure:1
     depends_on:
       - postgres
@@ -39,6 +40,8 @@ services:
       - ./airflow/dags:/opt/airflow/dags
       - ./airflow/logs:/opt/airflow/logs
       - ./airflow/plugins:/opt/airflow/plugins
+      - ./airflow/scripts:/opt/airflow/scripts
+      - ./airflow/requirements.txt:/opt/airflow/requirements.txt
 
   backend-service:
     build: ./backend-service
@@ -46,8 +49,6 @@ services:
       - "5000"
     ports:
       - "5000:5000"
-    volumes:
-      - ./backend-service:/usr/src/app
     environment:
       - FLASK_ENV=development
       - FLASK_APP=app.py
