@@ -102,6 +102,25 @@ class SearchDataParser(BaseOperator):
         return "response"
 
 
+class YouTubeDataParser(BaseOperator):
+
+    @apply_defaults
+    def __init__(self,
+                 data,
+                 *args,
+                 **kwargs):
+
+        self.data = data
+        super(YouTubeDataParser, self).__init__(*args, **kwargs)
+
+    def execute(self, context):
+        log.info('YouTubeDataParser Initiated')
+        log.info("Some process happens here")
+        log.info(self.data)
+
+        return "response"
+
+
 class NewsDataParser(BaseOperator):
 
     @apply_defaults

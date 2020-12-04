@@ -1,1 +1,7 @@
+GoogleNews
 spacy
+newspaper3k
+googlesearch-python
+tweepy
+youtube-search-python
+youtube-transcript-api

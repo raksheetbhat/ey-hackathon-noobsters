@@ -1,13 +1,17 @@
 from airflow.operators.dummy_operator import DummyOperator
 
 from operators.data_source_operators \
-    import TwitterDataCollector, FBDataCollector, LinkedinDataCollector, SearchDataCollector, WebDataCollector
+    import TwitterDataCollector, FBDataCollector, LinkedinDataCollector, SearchDataCollector, WebDataCollector, \
+    NewsDataCollector, YouTubeDataCollector
 
 from operators.data_parser_operators \
-    import TwitterDataParser, FBDataParser, LinkedinDataParser, SearchDataParser, WebDataParser
+    import TwitterDataParser, FBDataParser, LinkedinDataParser, SearchDataParser, WebDataParser, NewsDataParser, \
+    YouTubeDataParser
 
 from operators.data_science_operators \
     import SentimentAnalyzer, KeywordAnalyzer
+
+import os
 
 
 data_source_operator_map = {
@@ -15,16 +19,22 @@ data_source_operator_map = {
     "twitter": TwitterDataCollector,
     "search": SearchDataCollector,
     "linkedin": LinkedinDataCollector,
-    "website": WebDataCollector
+    "website": WebDataCollector,
+    "news": NewsDataCollector,
+    "youtube": YouTubeDataCollector
 }
+
 
 data_parser_operator_map = {
     "facebook": FBDataParser,
     "twitter": TwitterDataParser,
     "search": SearchDataParser,
     "linkedin": LinkedinDataParser,
-    "website": WebDataParser
+    "website": WebDataParser,
+    "news": NewsDataParser,
+    "youtube": YouTubeDataParser
 }
+
 
 data_analytics_operators = {
     "sentiment": SentimentAnalyzer,
@@ -53,7 +63,7 @@ def construct_dag(task, dag):
         if source_operator is not None:
             source_operator_instance = source_operator(
                                     task_id=data_source + "_source_" + str(task["job_id"]),
-                                    data="some_value",
+                                    data=task,
                                     retries=3,
                                     dag=dag)
 
@@ -93,6 +103,19 @@ def construct_analytics_operators(data_source, dag):
 
     return data_analytics_operator_instances
 
+
+def create_repos(**kwargs):
+
+    task = kwargs["task"]
+
+    if not os.path.exists('/opt/airflow/data/'+str(task["job_id"])):
+        os.makedirs('/opt/airflow/data/'+str(task["job_id"]))
+
+    if not os.path.exists('/opt/airflow/data/'+str(task["job_id"])+'/source'):
+        os.makedirs('/opt/airflow/data/'+str(task["job_id"])+'/source')
+
+    if not os.path.exists('/opt/airflow/data/'+str(task["job_id"])+'/insights'):
+        os.makedirs('/opt/airflow/data/'+str(task["job_id"])+'/insights')
 
 
 

@@ -23,6 +23,7 @@ services:
       - ./airflow/logs:/opt/airflow/logs
       - ./airflow/plugins:/opt/airflow/plugins
       - ./airflow/scripts:/opt/airflow/scripts
+      - ./airflow/data:/opt/airflow/data
       - ./airflow/requirements.txt:/opt/airflow/requirements.txt
     ports:
       - "8080:8080"
@@ -41,6 +42,7 @@ services:
       - ./airflow/logs:/opt/airflow/logs
       - ./airflow/plugins:/opt/airflow/plugins
       - ./airflow/scripts:/opt/airflow/scripts
+      - ./airflow/data:/opt/airflow/data
       - ./airflow/requirements.txt:/opt/airflow/requirements.txt
 
   backend-service:

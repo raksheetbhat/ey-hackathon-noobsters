@@ -15,5 +15,12 @@ COPY requirements.txt /opt/
 WORKDIR /opt
 
 RUN pip3 install --no-cache-dir -r requirements.txt
+
+RUN python -m nltk.downloader punkt
+
 RUN python -m spacy download en_core_web_sm
 
+USER root
+RUN chmod 755 /opt/
+
+USER airflow
