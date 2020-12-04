@@ -89,4 +89,4 @@ def get_article(link):
     return article
 
 
-print(get_custom_search_results('BCG','Supply chain'))
+# print(get_custom_search_results('BCG','Supply chain'))

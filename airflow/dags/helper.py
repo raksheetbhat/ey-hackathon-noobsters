@@ -12,6 +12,8 @@ from operators.data_science_operators \
     import SentimentAnalyzer, KeywordAnalyzer
 
 import os
+import requests
+import json
 
 
 data_source_operator_map = {
@@ -118,4 +120,12 @@ def create_repos(**kwargs):
         os.makedirs('/opt/airflow/data/'+str(task["job_id"])+'/insights')
 
 
+def fetch_tasks():
+    r = requests.get('http://ey_hack_backend-service_1:5000/fetch_new_tasks')
 
+    if r.status_code == 200:
+        tasks = json.loads(r.text)
+
+        return tasks
+
+    return []

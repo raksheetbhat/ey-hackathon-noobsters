@@ -6,29 +6,29 @@ from datetime import datetime
 
 import helper
 
-output = [{
-
-        "job_id": 1,
-        "job_name": "BCG Analysis",
-        "start_date": "2020-11-25",
-        "end_date": "",
-        "goal": "competitive_analysis",
-        "data_sources": ["twitter","website","news","youtube"],
-        "domain": "supply chain",
-        "company_name": "BCG",
-        "company_url": "www.bcg.com",
-        "status": "submitted"
-    }, {
-        "job_id": 2,
-        "job_name": "Trends in Supply chain",
-        "start_date": "2020-11-25",
-        "end_date": "",
-        "goal": "emerging_trends",
-        "data_sources": ["twitter","search","news","youtube"],
-        "domain": "Blockchain",
-        "status": "submitted"
-    }
-]
+# output = [{
+#
+#         "job_id": 1,
+#         "job_name": "BCG Analysis",
+#         "start_date": "2020-11-25",
+#         "end_date": "",
+#         "goal": "competitive_analysis",
+#         "data_sources": ["twitter","website","news","youtube"],
+#         "domain": "supply chain",
+#         "company_name": "BCG",
+#         "company_url": "www.bcg.com",
+#         "status": "submitted"
+#     }, {
+#         "job_id": 2,
+#         "job_name": "Trends in Supply chain",
+#         "start_date": "2020-11-25",
+#         "end_date": "",
+#         "goal": "emerging_trends",
+#         "data_sources": ["twitter","search","news","youtube"],
+#         "domain": "Blockchain",
+#         "status": "submitted"
+#     }
+# ]
 
 
 def create_dag(task):
@@ -55,6 +55,8 @@ def create_dag(task):
 
     return dag
 
+
+output = helper.fetch_tasks()
 
 # Get request from server
 for task in output:
