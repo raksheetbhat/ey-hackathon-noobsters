@@ -1,11 +1,13 @@
 from airflow.models.baseoperator import BaseOperator
 from airflow.utils.decorators import apply_defaults
 
-from helper_utils.nlp_utils import analyze_tweets
+import sys
+sys.path.append('/opt/airflow/plugins/operators/')
+
+from helper_utils.nlp_utils import analyze_tweets, analyze_news
+
 import copy
-
 import logging
-
 
 log = logging.getLogger(__name__)
 
@@ -46,11 +48,18 @@ class TwitterAnalyzer(BaseOperator):
         insights["source"] = "Twitter"
         insights["count"] = len(value)
 
+        stop_words = []
+
+        domain = self.data["domain"]
+
+        if domain is not None or domain != "":
+            stop_words.append(domain.lower().split(" "))
+
         if value is not None:
             log.info(value)
 
             try:
-                insights = analyze_tweets(value, insights)
+                insights = analyze_tweets(value, insights, stop_words)
 
             except Exception as e:
                 print(e)
@@ -217,7 +226,24 @@ class NewsAnalyzer(BaseOperator):
         value = context["task_instance"].xcom_pull(
             task_ids=self.parent_task_id)
 
+        insights = copy.deepcopy(INSIGHTS_SCHEMA)
+
+        insights["source"] = "News"
+
+        stop_words = []
+
+        domain = self.data["domain"]
+
+        if domain is not None or domain != "":
+            stop_words.append(domain.lower().split(" "))
+
         if value is not None:
             log.info(value)
 
-        return "response"
+            try:
+                insights = analyze_news(value, insights, stop_words)
+
+            except Exception as e:
+                print(e)
+
+        return insights
