@@ -50,15 +50,16 @@ def get_news_articles(keyword):
             news["text"] = str(article.text)
             news["authors"] = str(article.authors)
 
-        output.append(news)
+            output.append(news)
 
     return output
 
 
 def get_article(link):
 
+    article = Article(link)
+
     try:
-        article = Article(link)
         article.download()
         article.parse()
         article.nlp()

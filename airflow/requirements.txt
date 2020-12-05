@@ -5,3 +5,6 @@ googlesearch-python
 tweepy
 youtube-search-python
 youtube-transcript-api
+torch
+bert-extractive-summarizer
+transformers

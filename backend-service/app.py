@@ -10,7 +10,7 @@ data = [{
         "start_date": "2020-11-25",
         "end_date": "",
         "goal": "competitive_analysis",
-        "data_sources": ["twitter","website","news","youtube"],
+        "data_sources": ["twitter","news","youtube"],
         "domain": "supply chain",
         "company_name": "BCG",
         "company_url": "www.bcg.com",

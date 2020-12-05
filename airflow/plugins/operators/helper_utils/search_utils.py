@@ -77,7 +77,6 @@ def get_article(link):
     article = Article(link)
 
     try:
-
         article.download()
         article.parse()
         article.nlp()
