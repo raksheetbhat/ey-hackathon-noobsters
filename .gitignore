@@ -1,3 +1,4 @@
+.history
 .DS_Store
 .env
 .flaskenv
@@ -47,6 +48,7 @@ chrome-user-data
 .vscode
 *.swp
 *.swo
+
 
 packages/react-devtools-core/dist
 packages/react-devtools-extensions/chrome/build

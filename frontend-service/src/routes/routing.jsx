@@ -9,10 +9,12 @@ import Alerts from '../views/ui-components/alert.jsx';
 import Badges from '../views/ui-components/badge.jsx';
 import Buttons from '../views/ui-components/button.jsx';
 import Cards from '../views/ui-components/cards.jsx';
+import JobForm from '../views/ui-components/createJob.jsx';
 import LayoutComponent from '../views/ui-components/layout.jsx';
 import PaginationComponent from '../views/ui-components/pagination.jsx';
 import PopoverComponent from '../views/ui-components/popover.jsx';
 import TooltipComponent from '../views/ui-components/tooltip.jsx';
+import ViewJob from '../views/ui-components/viewJob.jsx';
 
 var ThemeRoutes = [
   {
@@ -20,6 +22,18 @@ var ThemeRoutes = [
     name: 'Dashboard',
     icon: 'mdi mdi-adjust',
     component: FirstDashboard
+  },
+  {
+    path: '/ui-components/job-form',
+    name: 'Create new job',
+    icon: 'mdi mdi-comment-processing-outline',
+    component: JobForm
+  },
+  {
+    path: '/ui-components/view-job',
+    name: 'View job insights',
+    icon: 'mdi mdi-comment-processing-outline',
+    component: ViewJob
   },
   {
     path: '/ui-components/alert',

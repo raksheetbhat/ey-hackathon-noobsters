@@ -1,0 +1,69 @@
+databaseChangeLog:
+- changeSet:
+    id: 1607243497048-1
+    author: raksheet.bhat (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: jobPK
+            name: id
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: created
+            type: datetime
+        - column:
+            constraints:
+              nullable: false
+            name: last_updated
+            type: datetime
+        - column:
+            name: version
+            type: BIGINT
+        - column:
+            name: company_name
+            type: VARCHAR(255)
+        - column:
+            name: company_url
+            type: VARCHAR(255)
+        - column:
+            name: data_sources
+            type: VARCHAR(255)
+        - column:
+            name: domain
+            type: VARCHAR(255)
+        - column:
+            name: end_date
+            type: datetime
+        - column:
+            name: goal
+            type: VARCHAR(255)
+        - column:
+            name: job_name
+            type: VARCHAR(255)
+        - column:
+            name: start_date
+            type: datetime
+        - column:
+            constraints:
+              nullable: false
+            name: status
+            type: INT
+        tableName: job
+- changeSet:
+    id: 1607243497048-2
+    author: raksheet.bhat (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: id
+        constraintName: UC_JOBID_COL
+        tableName: job
+- include:
+      file: db/changelog/db.changelog-1.yaml
+

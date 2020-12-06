@@ -1,0 +1,47 @@
+databaseChangeLog:
+- changeSet:
+    id: 1607257565637-1
+    author: raksheet.bhat (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: job_insightsPK
+            name: id
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: created
+            type: datetime
+        - column:
+            constraints:
+              nullable: false
+            name: last_updated
+            type: datetime
+        - column:
+            name: version
+            type: BIGINT
+        - column:
+            name: job_id
+            type: BIGINT
+        - column:
+            name: json_text
+            type: TEXT
+        - column:
+            name: source
+            type: VARCHAR(255)
+        tableName: job_insights
+- changeSet:
+    id: 1607257565637-2
+    author: raksheet.bhat (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: id
+        constraintName: UC_JOB_INSIGHTSID_COL
+        tableName: job_insights
+
