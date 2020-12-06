@@ -22,7 +22,11 @@ RUN python -m nltk.downloader vader_lexicon
 
 RUN python -m spacy download en_core_web_md
 
-RUN python -c 'from summarizer import Summarizer; model = Summarizer()'
+#RUN python -c 'from summarizer import Summarizer; model = Summarizer()'
+
+#torch
+#bert-extractive-summarizer
+#transformers
 
 USER root
 RUN chmod 755 /opt/

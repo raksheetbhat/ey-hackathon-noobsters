@@ -16,6 +16,7 @@ services:
     restart: on-failure:1
     depends_on:
       - postgres
+
     env_file:
       - ./airflow/.env
     volumes:
@@ -32,9 +33,12 @@ services:
     build: ./airflow
     entrypoint: ./airflow/scripts/entrypoint_scheduler.sh
     restart: on-failure:1
+    deploy:
+      replicas: 1
     depends_on:
       - postgres
       - webserver
+
     env_file:
       - ./airflow/.env
     volumes:

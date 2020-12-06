@@ -71,7 +71,7 @@ def construct_dag(task, dag):
                 analyzer_operator_instance = analyzer_operator(
                     task_id=data_source + "_analyzer_" + str(task["job_id"]),
                     parent_task_id=data_source + "_data_fetcher_" + str(task["job_id"]),
-                    data="some_value",
+                    data=task,
                     retries=3,
                     dag=dag)
 

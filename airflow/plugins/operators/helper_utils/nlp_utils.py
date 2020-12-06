@@ -1,5 +1,6 @@
 # from summarizer import Summarizer
-import json
+# import json
+
 import copy
 
 
@@ -26,6 +27,9 @@ nlp = spacy.load("en_core_web_md")
 def get_keywords(text, stop_words):
     result = []
     pos_tag = ['PROPN', 'ADJ', 'NOUN']  # 1
+
+    print("Stop Words : " + str(stop_words))
+
     doc = nlp(text.lower())  # 2
     for token in doc:
         # 3
@@ -45,10 +49,11 @@ def get_keywords(text, stop_words):
 
 from nltk.sentiment.vader import SentimentIntensityAnalyzer as SIA
 
+sia = SIA()
+
 
 def get_sentiment(text):
 
-    sia = SIA()
     pol_score = sia.polarity_scores(text)
 
     if pol_score["compound"] > 0.4:
@@ -76,6 +81,18 @@ NEWS_SCHEMA = {
     "sentiment": "",
     "keywords": "",
     "source": ""
+}
+
+VIDEO_SCHEMA = {
+    "link": "",
+    "title": "",
+    "views": "",
+    "sentiment": "",
+    "keywords": [],
+    "published": "",
+    "channel": "",
+    "duration":"",
+    "summary": ""
 }
 
 
@@ -148,18 +165,56 @@ def analyze_news(news_articles, insights, stop_words):
     return insights
 
 
-with open("/opt/airflow/data/1/source/news.json", 'r') as file:
+def analyze_videos(videos, insights, stop_words):
 
-    tweets = file.read()
-    insights = {
-        "source": "news",
-        "count": "",
-        "sentiment": "",
-        "keywords": [],
-        "items": []
-    }
+    sentiments = []
+    text = ""
 
-    analyze_news(json.loads(tweets), insights, ["supply","chain"])
+    for video in videos:
+
+        if len(video["transcript"]) < 50:
+            continue
+
+        video_insight = copy.deepcopy(VIDEO_SCHEMA)
+
+        video_insight["link"] = video["link"]
+        video_insight["title"] = video["title"]
+        video_insight["views"] = video["views"]
+        video_insight["duration"] = video["duration"]
+        video_insight["channel"] = video["channel"]
+        video_insight["published"] = video["published"]
+
+        sentiment = get_sentiment(video["transcript"])
+
+        sentiments.append(sentiment)
+
+        video_insight["sentiment"] = sentiment
+        video_insight["keywords"] = get_keywords(video["transcript"], stop_words)
+
+        insights["items"].append(video_insight)
+
+        text += " " + video["transcript"]
+
+    keywords = get_keywords(text, stop_words)
+
+    insights["sentiment"] = sum(sentiments)
+    insights["keywords"] = keywords
+
+    # print(keywords)
+    return insights
+
+# with open("/opt/airflow/data/1/source/news.json", 'r') as file:
+#
+#     tweets = file.read()
+#     insights = {
+#         "source": "news",
+#         "count": "",
+#         "sentiment": "",
+#         "keywords": [],
+#         "items": []
+#     }
+#
+#     analyze_news(json.loads(tweets), insights, ["supply","chain"])
 
 
 # get_keywords('/opt/airflow/data/2/source/news.json')

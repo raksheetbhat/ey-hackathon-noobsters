@@ -118,3 +118,18 @@ def scrap_news_article(link):
             output.append(t)
 
     return output
+
+#
+# article = get_article('https://www.linkedin.com/pulse/5-biggest-retail-trends-2021-bernard-marr/')
+# print(article.text)
+
+
+
+
+
+
+
+
+
+
+

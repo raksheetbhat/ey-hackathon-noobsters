@@ -10,7 +10,7 @@ sys.path.append('/opt/airflow/plugins/operators/')
 from helper_utils.news_source_utils import get_news_articles
 from helper_utils.twitter_utils import get_tweets
 from helper_utils.data_write_utils import write_data
-from helper_utils.search_utils import get_custom_search_results
+from helper_utils.search_utils import get_custom_search_results, get_linkedin_results
 from helper_utils.youtube_source_utils import get_youtube_videos
 
 log = logging.getLogger(__name__)
@@ -38,7 +38,7 @@ class TwitterDataCollector(BaseOperator):
             write_data(output, self.data["job_id"], "source", "twitter")
 
         log.info(output)
-        return output
+        return ""
 
 
 class FBDataCollector(BaseOperator):
@@ -76,7 +76,13 @@ class LinkedinDataCollector(BaseOperator):
         log.info("Some process happens here")
         log.info(self.data)
 
-        return "response"
+        output = get_linkedin_results(self.data["domain"])
+
+        if output is not None:
+            write_data(output, self.data["job_id"],"source", "linkedin")
+
+        log.info(output)
+        return ""
 
 
 class WebDataCollector(BaseOperator):
@@ -106,7 +112,7 @@ class WebDataCollector(BaseOperator):
             write_data(output, self.data["job_id"], "source", "website")
 
         log.info(output)
-        return output
+        return ""
 
 
 class SearchDataCollector(BaseOperator):
@@ -165,7 +171,7 @@ class YouTubeDataCollector(BaseOperator):
 
         log.info(output)
 
-        return output
+        return ""
 
 
 class NewsDataCollector(BaseOperator):
@@ -190,4 +196,4 @@ class NewsDataCollector(BaseOperator):
             write_data(output, self.data["job_id"],"source", "news")
 
         log.info(output)
-        return output
+        return ""

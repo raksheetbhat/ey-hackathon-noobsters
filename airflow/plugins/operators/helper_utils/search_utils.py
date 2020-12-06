@@ -33,12 +33,30 @@ def get_custom_search_results(company, keyword):
     if search_engine is None:
         return []
 
-    query_string = {'key': KEY,
-             'cx':search_engine,
-             'q':'"' + keyword + '"',
-             'sort':'date'}
+    output = get_custom_search_articles(search_engine, keyword)
 
-    r = requests.get('https://www.googleapis.com/customsearch/v1',params=query_string)
+    return output
+
+
+def get_linkedin_results(keyword):
+
+    print("Fetching linkedin results for : " + keyword)
+
+    search_engine = '9678cadc8d350d747'
+
+    output = get_custom_search_articles(search_engine, keyword)
+
+    return output
+
+
+def get_custom_search_articles(search_engine, keyword):
+
+    query_string = {'key': KEY,
+                    'cx': search_engine,
+                    'q': '"' + keyword + '"',
+                    'sort': 'date'}
+
+    r = requests.get('https://www.googleapis.com/customsearch/v1', params=query_string)
 
     output = []
 
@@ -52,12 +70,6 @@ def get_custom_search_results(company, keyword):
             article = get_article(item["link"])
 
             if article is not None:
-                # print("Title : " + article.title)
-                # print("Publish date : " + str(article.publish_date))
-                # print("Author : " + str(article.authors))
-                # print("Keywords : " + str(article.keywords))
-                # print("Text : " + str(article.text))
-                # print("\n")
 
                 search = copy.deepcopy(SEARCH_SCHEMA)
 
