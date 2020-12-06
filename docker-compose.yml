@@ -1,6 +1,12 @@
 version: '3.8'
 
 services:
+  postgres:
+    image: postgres
+    environment:
+      - POSTGRES_USER=airflow
+      - POSTGRES_PASSWORD=airflow
+      - POSTGRES_DB=airflow
   webserver:
     build: ./airflow
     entrypoint: ./airflow/scripts/entrypoint_webserver.sh
