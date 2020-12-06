@@ -3,12 +3,14 @@ version: '3.8'
 services:
   postgres:
     image: postgres
+    container_name: postgres
     environment:
       - POSTGRES_USER=airflow
       - POSTGRES_PASSWORD=airflow
       - POSTGRES_DB=airflow
   webserver:
     build: ./airflow
+    container_name: airflow-webserver
     entrypoint: ./airflow/scripts/entrypoint_webserver.sh
     deploy:
       replicas: 1
@@ -30,6 +32,7 @@ services:
 
   scheduler:
     build: ./airflow
+    container_name: airflow-scheduler
     entrypoint: ./airflow/scripts/entrypoint_scheduler.sh
     restart: on-failure:1
     deploy:
@@ -50,6 +53,7 @@ services:
 
   docker-mysql:
     image: mysql:latest
+    container_name: mysql
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_DATABASE=ey_hackathon
@@ -57,6 +61,7 @@ services:
 
   backend-java-service:
     build: ./backend-java-service
+    container_name: backend
     depends_on:
       - docker-mysql
     expose:
@@ -85,12 +90,13 @@ services:
   #     - FLASK_APP=flask-app.py
   #     - FLASK_DEBUG=1
 
-  # frontend-service:
-  #   build: ./frontend-service
-  #   expose:
-  #     - "3000"
-  #   ports:
-  #     - "3000:3000"
-  #   volumes:
-  #     - ./frontend-service/src:/app/src
-  #     - ./frontend-service/public:/app/public
+  frontend-service:
+     build: ./frontend-service
+     container_name: ui
+     expose:
+       - "3000"
+     ports:
+       - "3000:3000"
+     volumes:
+       - ./frontend-service/src:/app/src
+       - ./frontend-service/public:/app/public

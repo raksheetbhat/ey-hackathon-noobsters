@@ -10,6 +10,7 @@ from helper_utils.data_write_utils import write_data
 import copy
 import logging
 import json
+import requests
 
 log = logging.getLogger(__name__)
 
@@ -56,12 +57,11 @@ class TwitterAnalyzer(BaseOperator):
         # value = context["task_instance"].xcom_pull(
         #     task_ids=self.parent_task_id)
 
-        value = get_content('/opt/airflow/data/'+str(self.data["job_id"])+'/source/twitter.json')
+        value = get_content('/opt/airflow/data/'+str(self.data["id"])+'/source/twitter.json')
 
         insights = copy.deepcopy(INSIGHTS_SCHEMA)
 
-        insights["source"] = "Twitter"
-        insights["count"] = len(value)
+        insights["source"] = "twitter"
 
         stop_words = []
 
@@ -80,8 +80,8 @@ class TwitterAnalyzer(BaseOperator):
                 print(e)
 
             if insights is not None:
-                write_data(insights, self.data["job_id"], "insights", "twitter")
-
+                write_data(insights, self.data["id"], "insights", "twitter")
+                update_backend(self.data["id"], "twitter", insights)
         return ""
 
 
@@ -107,11 +107,11 @@ class LinkedinAnalyzer(BaseOperator):
         # value = context["task_instance"].xcom_pull(
         #     task_ids=self.parent_task_id)
 
-        value = get_content('/opt/airflow/data/' + str(self.data["job_id"]) + '/source/linkedin.json')
+        value = get_content('/opt/airflow/data/' + str(self.data["id"]) + '/source/linkedin.json')
 
         insights = copy.deepcopy(INSIGHTS_SCHEMA)
 
-        insights["source"] = "Linkedin"
+        insights["source"] = "linkedin"
 
         stop_words = []
 
@@ -130,38 +130,9 @@ class LinkedinAnalyzer(BaseOperator):
                 print(e)
 
             if insights is not None:
-                write_data(insights, self.data["job_id"], "insights", "linkedin")
-
+                write_data(insights, self.data["id"], "insights", "linkedin")
+                update_backend(self.data["id"], "linkedin", insights)
         return ""
-
-
-class FBAnalyzer(BaseOperator):
-
-    @apply_defaults
-    def __init__(self,
-                 parent_task_id,
-                 data,
-                 *args,
-                 **kwargs):
-        self.data = data
-        self.parent_task_id = parent_task_id
-
-        super(FBAnalyzer, self).__init__(*args, **kwargs)
-
-    def execute(self, context):
-        log.info('FBAnalyzer Initiated')
-        log.info("Some process happens here")
-        log.info(self.data)
-
-        # value = context["task_instance"].xcom_pull(
-        #     task_ids=self.parent_task_id)
-
-        value = get_content('/opt/airflow/data/' + str(self.data["job_id"]) + '/source/fb.json')
-
-        if value is not None:
-            log.info(value)
-
-        return "response"
 
 
 class WebAnalyzer(BaseOperator):
@@ -185,11 +156,11 @@ class WebAnalyzer(BaseOperator):
         # value = context["task_instance"].xcom_pull(
         #     task_ids=self.parent_task_id)
 
-        value = get_content('/opt/airflow/data/' + str(self.data["job_id"]) + '/source/website.json')
+        value = get_content('/opt/airflow/data/' + str(self.data["id"]) + '/source/website.json')
 
         insights = copy.deepcopy(INSIGHTS_SCHEMA)
 
-        insights["source"] = "Website"
+        insights["source"] = "website"
         stop_words = []
 
         domain = self.data["domain"]
@@ -207,39 +178,10 @@ class WebAnalyzer(BaseOperator):
                 print(e)
 
             if insights is not None:
-                write_data(insights, self.data["job_id"], "insights", "website")
+                write_data(insights, self.data["id"], "insights", "website")
+                update_backend(self.data["id"], "website", insights)
 
         return ""
-
-
-class SearchAnalyzer(BaseOperator):
-
-    @apply_defaults
-    def __init__(self,
-                 parent_task_id,
-                 data,
-                 *args,
-                 **kwargs):
-
-        self.data = data
-        self.parent_task_id = parent_task_id
-
-        super(SearchAnalyzer, self).__init__(*args, **kwargs)
-
-    def execute(self, context):
-        log.info('SearchAnalyzer Initiated')
-        log.info("Some process happens here")
-        log.info(self.data)
-
-        # value = context["task_instance"].xcom_pull(
-        #     task_ids=self.parent_task_id)
-
-        value = get_content('/opt/airflow/data/' + str(self.data["job_id"]) + '/source/search.json')
-
-        if value is not None:
-            log.info(value)
-
-        return "response"
 
 
 class YouTubeAnalyzer(BaseOperator):
@@ -264,11 +206,11 @@ class YouTubeAnalyzer(BaseOperator):
         # value = context["task_instance"].xcom_pull(
         #     task_ids=self.parent_task_id)
 
-        value = get_content('/opt/airflow/data/' + str(self.data["job_id"]) + '/source/youtube.json')
+        value = get_content('/opt/airflow/data/' + str(self.data["id"]) + '/source/youtube.json')
 
         insights = copy.deepcopy(INSIGHTS_SCHEMA)
 
-        insights["source"] = "YouTube"
+        insights["source"] = "youtube"
         stop_words = []
 
         domain = self.data["domain"]
@@ -286,7 +228,8 @@ class YouTubeAnalyzer(BaseOperator):
                 print(e)
 
             if insights is not None:
-                write_data(insights, self.data["job_id"], "insights", "youtube")
+                write_data(insights, self.data["id"], "insights", "youtube")
+                update_backend(self.data["id"], "youtube", insights)
 
         return ""
 
@@ -312,11 +255,11 @@ class NewsAnalyzer(BaseOperator):
         # value = context["task_instance"].xcom_pull(
         #     task_ids=self.parent_task_id)
 
-        value = get_content('/opt/airflow/data/' + str(self.data["job_id"]) + '/source/news.json')
+        value = get_content('/opt/airflow/data/' + str(self.data["id"]) + '/source/news.json')
 
         insights = copy.deepcopy(INSIGHTS_SCHEMA)
 
-        insights["source"] = "News"
+        insights["source"] = "news"
 
         stop_words = []
 
@@ -335,6 +278,72 @@ class NewsAnalyzer(BaseOperator):
                 print(e)
 
             if insights is not None:
-                write_data(insights, self.data["job_id"], "insights", "news")
+                write_data(insights, self.data["id"], "insights", "news")
+                update_backend(self.data["id"], "news", insights)
 
         return ""
+
+
+class InsightsAggregator(BaseOperator):
+
+    @apply_defaults
+    def __init__(self,
+                 data,
+                 *args,
+                 **kwargs):
+        self.data = data
+
+        super(InsightsAggregator, self).__init__(*args, **kwargs)
+
+    def execute(self, context):
+        log.info('InsightsAggregator Initiated')
+        log.info("Some process happens here")
+        log.info(self.data)
+
+        insights = copy.deepcopy(INSIGHTS_SCHEMA)
+        insights["source"] = "aggregated"
+
+        data_sources = self.data["dataSources"].split(",")
+
+        count = 0
+
+        sentiment = {
+            "positive":0,
+            "negative":0,
+            "neutral":0
+        }
+
+        keywords = {}
+
+        for data_source in data_sources:
+
+            value = get_content('/opt/airflow/data/{}/insights/{}.json'.format(str(self.data["id"]), data_source))
+
+            count += value.get("count",0)
+
+            sentiment["positive"] += value.get("sentiment",0).get("positive",0)
+            sentiment["negative"] += value.get("sentiment", 0).get("negative", 0)
+            sentiment["neutral"] += value.get("sentiment", 0).get("neutral", 0)
+
+            for key in value.get("keywords",[]).keys():
+                if keywords.get(key) is None:
+                    keywords[key] = value.get("keywords").get(key)
+
+                else:
+                    keywords[key] += value.get("keywords").get(key)
+
+        insights["count"] = count
+        insights["keywords"] = keywords
+        insights["sentiment"] = sentiment
+        insights["items"] = []
+
+        update_backend(self.data["id"], "aggregated", insights)
+
+        return ""
+
+
+def update_backend(id, source, insights):
+
+    post_body = {"jobId": id, "source": source, "jsonText": json.dumps(insights)}
+    r = requests.post('http://backend:8081/job/insights', json=post_body)
+    print(r.status_code)

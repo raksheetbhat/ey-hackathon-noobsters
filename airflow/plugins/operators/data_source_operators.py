@@ -32,32 +32,13 @@ class TwitterDataCollector(BaseOperator):
         log.info("Some process happens here")
         log.info(self.data)
 
-        output = get_tweets(self.data["domain"], self.data["start_date"])
+        output = get_tweets(self.data["domain"], self.data["startDate"])
 
         if output is not None:
-            write_data(output, self.data["job_id"], "source", "twitter")
+            write_data(output, self.data["id"], "source", "twitter")
 
         log.info(output)
         return ""
-
-
-class FBDataCollector(BaseOperator):
-
-    @apply_defaults
-    def __init__(self,
-                 data,
-                 *args,
-                 **kwargs):
-
-        self.data = data
-        super(FBDataCollector, self).__init__(*args, **kwargs)
-
-    def execute(self, context):
-        log.info('FBDataCollector Initiated')
-        log.info("Some process happens here")
-        log.info(self.data)
-
-        return "response"
 
 
 class LinkedinDataCollector(BaseOperator):
@@ -79,7 +60,7 @@ class LinkedinDataCollector(BaseOperator):
         output = get_linkedin_results(self.data["domain"])
 
         if output is not None:
-            write_data(output, self.data["job_id"],"source", "linkedin")
+            write_data(output, self.data["id"],"source", "linkedin")
 
         log.info(output)
         return ""
@@ -106,32 +87,13 @@ class WebDataCollector(BaseOperator):
         else:
             domain = self.data["domain"]
 
-        output = get_custom_search_results(self.data["company_name"], domain)
+        output = get_custom_search_results(self.data["companyName"], domain)
 
         if output is not None:
-            write_data(output, self.data["job_id"], "source", "website")
+            write_data(output, self.data["id"], "source", "website")
 
         log.info(output)
         return ""
-
-
-class SearchDataCollector(BaseOperator):
-
-    @apply_defaults
-    def __init__(self,
-                 data,
-                 *args,
-                 **kwargs):
-
-        self.data = data
-        super(SearchDataCollector, self).__init__(*args, **kwargs)
-
-    def execute(self, context):
-        log.info('SearchDataCollector Initiated')
-        log.info("Some process happens here")
-        log.info(self.data)
-
-        return "response"
 
 
 class YouTubeDataCollector(BaseOperator):
@@ -152,7 +114,7 @@ class YouTubeDataCollector(BaseOperator):
 
         keyword = ""
 
-        company_name = self.data.get("company_name")
+        company_name = self.data.get("companyName")
         domain = self.data.get("domain")
 
         if company_name is not None and company_name != "":
@@ -167,7 +129,7 @@ class YouTubeDataCollector(BaseOperator):
         output = get_youtube_videos(keyword)
 
         if output is not None:
-            write_data(output, self.data["job_id"], "source", "youtube")
+            write_data(output, self.data["id"], "source", "youtube")
 
         log.info(output)
 
@@ -193,7 +155,7 @@ class NewsDataCollector(BaseOperator):
         output = get_news_articles(self.data["domain"])
 
         if output is not None:
-            write_data(output, self.data["job_id"],"source", "news")
+            write_data(output, self.data["id"],"source", "news")
 
         log.info(output)
         return ""

@@ -95,11 +95,24 @@ VIDEO_SCHEMA = {
     "summary": ""
 }
 
+SENTIMENT_LOOKUP = {
+    "0": "neutral",
+    "1": "positive",
+    "-1": "negative"
+}
+
+SENTIMENTS_SCHEMA = {
+    "positive": 0,
+    "negative": 0,
+    "neutral": 0
+}
+
 
 def analyze_tweets(tweets, insights, stop_words):
 
-    sentiments = []
     text = ""
+    sentiments = copy.deepcopy(SENTIMENTS_SCHEMA)
+    count = 0
 
     for tweet in tweets:
 
@@ -112,26 +125,29 @@ def analyze_tweets(tweets, insights, stop_words):
 
         sentiment = get_sentiment(tweet["full_text"])
 
-        sentiments.append(sentiment)
+        sentiments[SENTIMENT_LOOKUP[str(sentiment)]] += 1
+
         tweet_insight["sentiment"] = sentiment
 
         insights["items"].append(tweet_insight)
 
         text += " " + tweet["full_text"]
+        count += 1
 
     keywords = get_keywords(text, stop_words)
 
-    insights["sentiment"] = sum(sentiments)
+    insights["sentiment"] = sentiments
     insights["keywords"] = keywords
-
+    insights["count"] = count
     # print(keywords)
     return insights
 
 
 def analyze_news(news_articles, insights, stop_words):
 
-    sentiments = []
     text = ""
+    sentiments = copy.deepcopy(SENTIMENTS_SCHEMA)
+    count = 0
 
     for news in news_articles:
 
@@ -145,7 +161,7 @@ def analyze_news(news_articles, insights, stop_words):
 
         sentiment = get_sentiment(news["text"])
 
-        sentiments.append(sentiment)
+        sentiments[SENTIMENT_LOOKUP[str(sentiment)]] += 1
 
         news_insight["sentiment"] = sentiment
         news_insight["keywords"] = get_keywords(news["text"], stop_words)
@@ -155,11 +171,13 @@ def analyze_news(news_articles, insights, stop_words):
         insights["items"].append(news_insight)
 
         text += " " + news["text"]
+        count += 1
 
     keywords = get_keywords(text, stop_words)
 
-    insights["sentiment"] = sum(sentiments)
+    insights["sentiment"] = sentiments
     insights["keywords"] = keywords
+    insights["count"] = count
 
     # print(keywords)
     return insights
@@ -167,8 +185,9 @@ def analyze_news(news_articles, insights, stop_words):
 
 def analyze_videos(videos, insights, stop_words):
 
-    sentiments = []
     text = ""
+    sentiments = copy.deepcopy(SENTIMENTS_SCHEMA)
+    count = 0
 
     for video in videos:
 
@@ -186,7 +205,7 @@ def analyze_videos(videos, insights, stop_words):
 
         sentiment = get_sentiment(video["transcript"])
 
-        sentiments.append(sentiment)
+        sentiments[SENTIMENT_LOOKUP[str(sentiment)]] += 1
 
         video_insight["sentiment"] = sentiment
         video_insight["keywords"] = get_keywords(video["transcript"], stop_words)
@@ -194,14 +213,16 @@ def analyze_videos(videos, insights, stop_words):
         insights["items"].append(video_insight)
 
         text += " " + video["transcript"]
+        count += 1
 
     keywords = get_keywords(text, stop_words)
 
-    insights["sentiment"] = sum(sentiments)
+    insights["sentiment"] = sentiments
     insights["keywords"] = keywords
+    insights["count"] = count
 
-    # print(keywords)
     return insights
+
 
 # with open("/opt/airflow/data/1/source/news.json", 'r') as file:
 #

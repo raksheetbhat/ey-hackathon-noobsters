@@ -31,8 +31,9 @@ def get_tweets(keyword,date_since):
                            lang="en",
                            result_type='popular',
                            tweet_mode='extended',
-                           count=50,
-                           since=date_since).items(50)
+                           count=50).items(50)
+
+    # since = date_since
 
     except Exception as e:
         print(e)
