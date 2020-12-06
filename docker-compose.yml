@@ -1,66 +1,88 @@
 version: '3.8'
 
 services:
-  postgres:
-    image: postgres
+#  postgres:
+#    image: postgres
+#    environment:
+#      - POSTGRES_USER=airflow
+#      - POSTGRES_PASSWORD=airflow
+#      - POSTGRES_DB=airflow
+
+#  webserver:
+#    image: apache/airflow
+#    entrypoint: ./scripts/entrypoint.sh
+#    deploy:
+#      replicas: 1
+#    restart: on-failure:1
+#    depends_on:
+#      - postgres
+#    env_file:
+#      - ./airflow/.env
+#    volumes:
+#      - ./airflow/dags:/opt/airflow/dags
+#      - ./airflow/logs:/opt/airflow/logs
+#      - ./airflow/plugins:/opt/airflow/plugins
+#      - ./airflow/scripts:/opt/airflow/scripts
+#    ports:
+#      - "8080:8080"
+
+#  scheduler:
+#    image: apache/airflow
+#    command: scheduler
+#    restart: on-failure:1
+#    depends_on:
+#      - postgres
+#      - webserver
+#    env_file:
+#      - ./airflow/.env
+#    volumes:
+#      - ./airflow/dags:/opt/airflow/dags
+#      - ./airflow/logs:/opt/airflow/logs
+#      - ./airflow/plugins:/opt/airflow/plugins
+
+  docker-mysql:
+    image: mysql:latest
     environment:
-      - POSTGRES_USER=airflow
-      - POSTGRES_PASSWORD=airflow
-      - POSTGRES_DB=airflow
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=ey_hackathon
+      - MYSQL_PASSWORD=root
 
-  webserver:
-    image: apache/airflow
-    entrypoint: ./scripts/entrypoint.sh
-    deploy:
-      replicas: 1
-    restart: on-failure:1
+  backend-java-service:
+    build: ./backend-java-service
     depends_on:
-      - postgres
-    env_file:
-      - ./airflow/.env
-    volumes:
-      - ./airflow/dags:/opt/airflow/dags
-      - ./airflow/logs:/opt/airflow/logs
-      - ./airflow/plugins:/opt/airflow/plugins
-      - ./airflow/scripts:/opt/airflow/scripts
-    ports:
-      - "8080:8080"
-
-  scheduler:
-    image: apache/airflow
-    command: scheduler
-    restart: on-failure:1
-    depends_on:
-      - postgres
-      - webserver
-    env_file:
-      - ./airflow/.env
-    volumes:
-      - ./airflow/dags:/opt/airflow/dags
-      - ./airflow/logs:/opt/airflow/logs
-      - ./airflow/plugins:/opt/airflow/plugins
-
-  backend-service:
-    build: ./backend-service
+      - docker-mysql
     expose:
-      - "5000"
+      - "8081"
     ports:
-      - "5000:5000"
+      - "8081:8081"
     volumes:
-      - ./backend-service:/usr/src/app
+      - ./backend-java-service:/app
     environment:
-      - FLASK_ENV=development
-      - FLASK_APP=app.py
-      - FLASK_DEBUG=1
+      - DATABASE_HOST=docker-mysql
+      - DATABASE_USER=root
+      - DATABASE_PASSWORD=root
+      - DATABASE_NAME=ey_hackathon  
+      - DATABASE_PORT=3306
 
-  frontend-service:
-    build: ./frontend-service
-    expose:
-      - "3000"
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./frontend-service/src:/usr/src/app/src
-      - ./frontend-service/public:/usr/src/app/public
-    links:
-      - "backend-service:backend-service"
+  # backend-service:
+  #   build: ./backend-service
+  #   expose:
+  #     - "5000"
+  #   ports:
+  #     - "5000:5000"
+  #   volumes:
+  #     - ./backend-service:/usr/src/app
+  #   environment:
+  #     - FLASK_ENV=development
+  #     - FLASK_APP=flask-app.py
+  #     - FLASK_DEBUG=1
+
+  # frontend-service:
+  #   build: ./frontend-service
+  #   expose:
+  #     - "3000"
+  #   ports:
+  #     - "3000:3000"
+  #   volumes:
+  #     - ./frontend-service/src:/app/src
+  #     - ./frontend-service/public:/app/public
