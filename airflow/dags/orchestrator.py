@@ -1,34 +1,34 @@
 from airflow import DAG
 from airflow.operators.dummy_operator import DummyOperator
+from airflow.operators.python_operator import PythonOperator
 
 from datetime import datetime
-import requests
 
 import helper
 
-output = [{
-
-        "job_id": 1,
-        "job_name": "BCG Analysis",
-        "start_data": "",
-        "end_date": "",
-        "goal": "competitive_analysis",
-        "data_sources": ["twitter","website","news","linkedin"],
-        "domain": "supply chain",
-        "company_name": "BCG",
-        "company_url": "www.bcg.com",
-        "status": "submitted"
-    }, {
-        "job_id": 2,
-        "job_name": "Trends in Supply chain",
-        "start_data": "",
-        "end_date": "",
-        "goal": "emerging_trends",
-        "data_sources": ["twitter","search","news","linkedin"],
-        "domain": "supply chain",
-        "status": "submitted"
-    }
-]
+# output = [{
+#
+#         "job_id": 1,
+#         "job_name": "BCG Analysis",
+#         "start_date": "2020-11-25",
+#         "end_date": "",
+#         "goal": "competitive_analysis",
+#         "data_sources": ["twitter","website","news","youtube"],
+#         "domain": "supply chain",
+#         "company_name": "BCG",
+#         "company_url": "www.bcg.com",
+#         "status": "submitted"
+#     }, {
+#         "job_id": 2,
+#         "job_name": "Trends in Supply chain",
+#         "start_date": "2020-11-25",
+#         "end_date": "",
+#         "goal": "emerging_trends",
+#         "data_sources": ["twitter","search","news","youtube"],
+#         "domain": "Blockchain",
+#         "status": "submitted"
+#     }
+# ]
 
 
 def create_dag(task):
@@ -46,12 +46,17 @@ def create_dag(task):
                             retries=3,
                             dag=dag)
 
+    create_data_repository = PythonOperator(task_id='python_task',
+                                            python_callable=helper.create_repos, op_kwargs={'task': task})
+
     operators = helper.construct_dag(task, dag)
 
-    initiate_operator >> operators
+    initiate_operator >> create_data_repository >> operators
 
     return dag
 
+
+output = helper.fetch_tasks()
 
 # Get request from server
 for task in output:
