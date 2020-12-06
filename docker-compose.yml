@@ -1,48 +1,48 @@
 version: '3.8'
 
 services:
-  postgres:
-    image: postgres
-    environment:
-      - POSTGRES_USER=airflow
-      - POSTGRES_PASSWORD=airflow
-      - POSTGRES_DB=airflow
-  webserver:
-    build: ./airflow
-    entrypoint: ./airflow/scripts/entrypoint_webserver.sh
-    deploy:
-      replicas: 1
-    restart: on-failure:1
-    depends_on:
-      - postgres
-    env_file:
-      - ./airflow/.env
-    volumes:
-      - ./airflow/dags:/opt/airflow/dags
-      - ./airflow/logs:/opt/airflow/logs
-      - ./airflow/plugins:/opt/airflow/plugins
-      - ./airflow/scripts:/opt/airflow/scripts
-      - ./airflow/data:/opt/airflow/data
-      - ./airflow/requirements.txt:/opt/airflow/requirements.txt
-    ports:
-      - "8080:8080"
+  # postgres:
+  #   image: postgres
+  #   environment:
+  #     - POSTGRES_USER=airflow
+  #     - POSTGRES_PASSWORD=airflow
+  #     - POSTGRES_DB=airflow
+  # webserver:
+  #   build: ./airflow
+  #   entrypoint: ./airflow/scripts/entrypoint_webserver.sh
+  #   deploy:
+  #     replicas: 1
+  #   restart: on-failure:1
+  #   depends_on:
+  #     - postgres
+  #   env_file:
+  #     - ./airflow/.env
+  #   volumes:
+  #     - ./airflow/dags:/opt/airflow/dags
+  #     - ./airflow/logs:/opt/airflow/logs
+  #     - ./airflow/plugins:/opt/airflow/plugins
+  #     - ./airflow/scripts:/opt/airflow/scripts
+  #     - ./airflow/data:/opt/airflow/data
+  #     - ./airflow/requirements.txt:/opt/airflow/requirements.txt
+  #   ports:
+  #     - "8080:8080"
 
-  scheduler:
-    build: ./airflow
-    entrypoint: ./airflow/scripts/entrypoint_scheduler.sh
-    restart: on-failure:1
-    depends_on:
-      - postgres
-      - webserver
-    env_file:
-      - ./airflow/.env
-    volumes:
-      - ./airflow/dags:/opt/airflow/dags
-      - ./airflow/logs:/opt/airflow/logs
-      - ./airflow/plugins:/opt/airflow/plugins
-      - ./airflow/scripts:/opt/airflow/scripts
-      - ./airflow/data:/opt/airflow/data
-      - ./airflow/requirements.txt:/opt/airflow/requirements.txt
+  # scheduler:
+  #   build: ./airflow
+  #   entrypoint: ./airflow/scripts/entrypoint_scheduler.sh
+  #   restart: on-failure:1
+  #   depends_on:
+  #     - postgres
+  #     - webserver
+  #   env_file:
+  #     - ./airflow/.env
+  #   volumes:
+  #     - ./airflow/dags:/opt/airflow/dags
+  #     - ./airflow/logs:/opt/airflow/logs
+  #     - ./airflow/plugins:/opt/airflow/plugins
+  #     - ./airflow/scripts:/opt/airflow/scripts
+  #     - ./airflow/data:/opt/airflow/data
+  #     - ./airflow/requirements.txt:/opt/airflow/requirements.txt
 
   docker-mysql:
     image: mysql:latest

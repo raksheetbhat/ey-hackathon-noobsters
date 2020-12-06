@@ -7,7 +7,7 @@ const JobForm = (props) => {
     const handleSubmit = (event) => {
       event.preventDefault();
 
-      let formData = {};
+      let formData = {'status': 1};
 
       for(let i=0;i<event.target.length;i++) {
         let tg = event.target[i];
@@ -55,7 +55,7 @@ const JobForm = (props) => {
       <Form id="job-form" onSubmit={handleSubmit.bind(this)}>
         <FormGroup>
           <Label for="jobName">Job name</Label>
-          <Input type="text" name="jobName" id="jobName" placeholder="test 1"/>
+          <Input type="text" name="jobName" id="jobName" placeholder=""/>
         </FormGroup>
         <FormGroup>
           <Label for="startDate">Start date</Label>
@@ -78,21 +78,19 @@ const JobForm = (props) => {
         <FormGroup>
           <Label for="goal">Choose goal</Label>
           <Input type="select" name="goal" id="goal">
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option>
+            <option>Competitive Analysis</option>
+            <option>Emerging trends</option>
+            <option>Social media engagement</option>
           </Input>
         </FormGroup>
         <FormGroup>
           <Label for="dataSources">Choose data sources (can be multiple)</Label>
           <Input type="select" name="dataSources" id="dataSources" multiple>
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option>
+            <option>twitter</option>
+            <option>linkedin</option>
+            <option>news</option>
+            <option>youtube</option>
+            <option>website</option>
           </Input>
         </FormGroup>
         <FormGroup>
@@ -111,13 +109,6 @@ const JobForm = (props) => {
             id="companyUrl"
             placeholder="http://kpmg.com"
           />
-        </FormGroup>
-        <FormGroup>
-          <Label for="status">Status</Label>
-          <Input type="select" name="status" id="status">
-            <option>1</option>
-            <option>0</option>
-          </Input>
         </FormGroup>
         <Button>Submit</Button>
       </Form>

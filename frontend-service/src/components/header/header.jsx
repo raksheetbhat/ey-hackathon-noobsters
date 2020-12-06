@@ -45,7 +45,8 @@ const Header = () => {
                     {/* Logos Or Icon will be goes here for Light Layout && Dark Layout                */}
                     {/*--------------------------------------------------------------------------------*/}
                     <NavbarBrand href="/">
-                        <b className="logo-icon">
+                        <span>Project Eagle Eye</span>
+                        {/* <b className="logo-icon">
                             <img src={logodarkicon} alt="homepage" className="dark-logo" />
                             <img
                                 src={logolighticon}
@@ -60,17 +61,17 @@ const Header = () => {
                                 className="light-logo"
                                 alt="homepage"
                             />
-                        </span>
+                        </span> */}
                     </NavbarBrand>
                     {/*--------------------------------------------------------------------------------*/}
                     {/* Mobile View Toggler  [visible only after 768px screen]                         */}
                     {/*--------------------------------------------------------------------------------*/}
-                    <button
+                    {/* <button
                         className="btn-link nav-toggler d-block d-md-none text-white"
                         onClick={() => showMobilemenu()}
                     >
                         <i className="ti-menu ti-close" />
-                    </button>
+                    </button> */}
                 </div>
                 <Collapse
                     className="navbarbg"
@@ -101,35 +102,36 @@ const Header = () => {
                         {/*--------------------------------------------------------------------------------*/}
                     </Nav>
                     <Nav className="ml-auto float-right" navbar>
-                        <NavItem>
+                        {/* <NavItem>
                             <a
                                 href="https://wrappixel.com/templates/materialpro-react-admin/"
                                 className="btn btn-danger mr-2"
                                 style={{ marginTop: '20px' }}
                             >
-                                Upgrade to Pro
-                </a>
-                        </NavItem>
+                                Export
+                            </a>
+                        </NavItem> */}
                         {/*--------------------------------------------------------------------------------*/}
                         {/* Start Profile Dropdown                                                         */}
                         {/*--------------------------------------------------------------------------------*/}
                         <UncontrolledDropdown nav inNavbar>
                             <DropdownToggle nav caret className="pro-pic">
-                                <img
-                                    src={profilephoto}
-                                    alt="user"
-                                    className="rounded-circle"
-                                    width="31"
-                                />
+                                <a
+                                    href="https://wrappixel.com/templates/materialpro-react-admin/"
+                                    className="btn btn-danger"
+                                    style={{ marginTop: '5px' }}
+                                >
+                                    Export
+                                </a>
                             </DropdownToggle>
                             <DropdownMenu right className="user-dd">
                                 <DropdownItem>
-                                    <i className="ti-user mr-1 ml-1" /> My Account
+                                    <i className="mr-1 ml-1" /> Export as ppt
                   </DropdownItem>
                                 <DropdownItem>
-                                    <i className="ti-wallet mr-1 ml-1" /> My Balance
+                                    <i className="mr-1 ml-1" /> Send over email
                   </DropdownItem>
-                                <DropdownItem className="border-bottom">
+                                {/* <DropdownItem className="border-bottom">
                                     <i className="ti-email mr-1 ml-1" /> Inbox
                   </DropdownItem>
                                 <DropdownItem className="border-bottom">
@@ -137,7 +139,7 @@ const Header = () => {
                   </DropdownItem>
                                 <DropdownItem href="/pages/login">
                                     <i className="fa fa-power-off mr-1 ml-1" /> Logout
-                  </DropdownItem>
+                  </DropdownItem> */}
                             </DropdownMenu>
                         </UncontrolledDropdown>
                         {/*--------------------------------------------------------------------------------*/}

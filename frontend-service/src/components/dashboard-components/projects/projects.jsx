@@ -48,15 +48,22 @@ const Projects = () => {
             .catch(error => console.log('error', error));
     }
 
+    const btnHandler = (jobId) => {
+        console.log('on click', jobId);
+        localStorage.setItem('jobId', jobId);
+        window.location.href = 'http://localhost:3000/ui-components/view-job';
+    }
+
     const JobRow = ({job}) => {
         return (
             <tr>
                 <td>{job.jobName}</td>
                 <td>{job.goal}</td>
-                <td><i className="fa fa-circle text-warning" id="tlp1"></i></td>
+                <td>{job.status == 3 ? <i className="fa fa-circle text-success" id="tlp1"></i> : 
+                    <i className="fa fa-circle text-warning" id="tlp1"></i>}</td>
                 <td>{job.dataSources}</td>
-                <td className="blue-grey-text  text-darken-4 font-medium">
-                    <a href="#">{job.id}</a>
+                <td>
+                <button onClick={btnHandler.bind(this, job.id)}>Click</button>
                 </td>
             </tr>
         )
