@@ -8,6 +8,7 @@ services:
       - POSTGRES_USER=airflow
       - POSTGRES_PASSWORD=airflow
       - POSTGRES_DB=airflow
+
   webserver:
     build: ./airflow
     container_name: airflow-webserver
