@@ -78,9 +78,9 @@ const Source = (props) => {
                             <CardTitle>Sentiments</CardTitle>
                             <PieChart
                                 data={[
-                                    { title: 'positive', value: props.sentiment.positive, color: '#43a047' },
-                                    { title: 'negative', value: props.sentiment.negative, color: '#f4511e' },
-                                    { title: 'neutral', value: props.sentiment.neutral, color: '#fdd835' },
+                                    { title: 'positive', value: props.sentiment.positive, color: '#66bb6a' },
+                                    { title: 'negative', value: props.sentiment.negative, color: '#ef5350' },
+                                    { title: 'neutral', value: props.sentiment.neutral, color: '#ffee58' },
                                 ]}
                                 //label={({ dataEntry }) => dataEntry.title}
                                 style={{width: "70%"}}
