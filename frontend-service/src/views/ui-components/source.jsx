@@ -48,12 +48,24 @@ const Source = (props) => {
 
     const getContent = (type) => {
         switch(type){
-            case 'twitter': return ['Twitter', '# Tweets'];
-            case 'linkedin': return ['Linkedin', '# Linkedin posts'];
-            case 'youtube': return ['YouTube', '# YouTube videos'];
-            case 'website': return ['Website', '# websites'];
-            case 'news': return ['News', '# News articles'];
-            case 'aggregated': return ['Aggregated', '# data points in total'];
+            case 'twitter': 
+            case 'Twitter': 
+                return ['Twitter', '# Tweets'];
+            case 'linkedin': 
+            case 'Linkedin':
+                return ['Linkedin', '# Linkedin posts'];
+            case 'youtube': 
+            case 'Youtube':
+                return ['YouTube', '# YouTube videos'];
+            case 'website': 
+            case 'Website':
+                return ['Website', '# websites'];
+            case 'news': 
+            case 'News':
+                return ['News', '# News articles'];
+            case 'aggregated':
+            case 'Aggregated':
+                 return ['Aggregated', '# data points in total'];
         }
     }
 
