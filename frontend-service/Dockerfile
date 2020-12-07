@@ -14,6 +14,11 @@ WORKDIR /app
 #RUN npm install react-scripts@3.4.1 -g --silent
 
 COPY ./package.json /app
+
+RUN npm cache clean -f
+
+RUN npm install -g npm
+
 RUN npm install
 
 # add app
