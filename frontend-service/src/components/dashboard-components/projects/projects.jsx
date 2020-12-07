@@ -6,6 +6,8 @@ import img2 from '../../../assets/images/users/2.jpg';
 import img3 from '../../../assets/images/users/3.jpg';
 import img4 from '../../../assets/images/users/4.jpg';
 
+import barchart from '../../../assets/images/icon/bar-chart.svg';
+
 import {
     Card,
     CardBody,
@@ -43,7 +45,10 @@ const Projects = () => {
                 
                 let li = []
                 result.map(v => {
-                    li.push(<JobRow job={v} key={v.id} />);
+                    console.log(v);
+                    if(v.status != 4){
+                        li.push(<JobRow job={v} key={v.id} />);
+                    }
                 });
 
                 setJobs(li);
@@ -60,7 +65,8 @@ const Projects = () => {
                     <i className="fa fa-circle text-warning" id="tlp1"></i>}</td>
                 <td>{job.dataSources}</td>
                 <td>
-                <button onClick={() => history.push('/ui-components/view-job/'+job.id)}>Insights</button>
+                <img src={barchart} onClick={() => history.push('/ui-components/view-job/'+job.id)}
+                    style={{width: 25, height: 'auto', cursor: 'pointer'}} />
                 </td>
             </tr>
         )
@@ -98,7 +104,7 @@ const Projects = () => {
                                 <th className="border-0">Goal</th>
                                 <th className="border-0">Status</th>
                                 <th className="border-0">Data sources</th>
-                                <th className="border-0">View job</th>
+                                <th className="border-0">Insights</th>
                             </tr>
                         </thead>
                         <tbody>{jobs.map(v => v)}</tbody>

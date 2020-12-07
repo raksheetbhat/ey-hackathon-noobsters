@@ -20,6 +20,8 @@ import {
     Col, Modal, ModalHeader, ModalBody, ModalFooter,Table
 } from 'reactstrap';
 
+import externallink from '../../assets/images/icon/external.svg';
+
 const Source = (props) => {
 
     const {
@@ -58,14 +60,11 @@ const Source = (props) => {
 
     return (
         <div>
-            <Row className="mb-3">
-                <Col xs="12" md="1">
-                    <h5 >{getContent(props.type)[0]}</h5>
-                </Col>
-                <Col xs="12" md="2">
-                    {props.source != 'aggregated' && <Button color="danger" onClick={toggle}>view data</Button>}
-                </Col>
-            </Row>
+            <div style={{display: 'inline-block'}}>
+                <h5 style={{float: 'left', marginRight: 10}}>{getContent(props.type)[0]}</h5>
+                {props.source != 'aggregated' && <img src={externallink} onClick={toggle} 
+                    style={{width: 17, height: 'auto', cursor: 'pointer'}} />}
+            </div>
             <Row>
                 <Col xs="12" md="4" >
                     <Card style={{marginBottom: "10px"}}>
@@ -106,14 +105,11 @@ const Source = (props) => {
                         <thead>
                             <tr>
                                 <th>#</th>
-                                {Object.keys(props.items[0]).map(v => <th>{v}</th>)}
+                                {props.items.length > 0 && Object.keys(props.items[0]).map(v => <th>{v}</th>)}
                             </tr>
                         </thead>
                         <tbody>
                             {props.items.map((v, i) => {
-                                //console.log('index', i);
-                                // let key = Object.keys(props.items[0])[i];
-
                                 let arr = [i+1];
 
                                 Object.keys(v).forEach(function(key) {
@@ -130,13 +126,6 @@ const Source = (props) => {
                                 });
 
                                 return createRow(arr);
-
-                                // if(typeof key !== 'undefined' && key in v && !Array.isArray(v[key]) 
-                                //     && typeof v[key] !== 'object'){
-                                //     //console.log(key, v[key]);
-
-                                //     return <td>{v[key]}</td>;
-                                // }
                             })}
                         </tbody>
                     </Table>
