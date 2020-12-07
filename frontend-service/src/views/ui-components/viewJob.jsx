@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Card, CardBody } from 'reactstrap';
 import { SERVER_URL } from '../../Constants';
 import Source from './source';
+import { useLocation } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 const ViewJob = (props) => {
 
@@ -28,6 +30,9 @@ const ViewJob = (props) => {
         "guys": 1,
         "partyyyy": 1
     };
+
+    const location = useLocation();
+    const history = useHistory();
     
     const [rows, setRows] = useState([]);
 
@@ -39,15 +44,26 @@ const ViewJob = (props) => {
         return li;
     }
 
+    const isInt = (value) => {
+        return !isNaN(value) && 
+               parseInt(Number(value)) == value && 
+               !isNaN(parseInt(value, 10));
+      }
+
     useEffect(() => {
+        let locArr = location.pathname.split('/'), jobId = locArr[locArr.length-1];
+
+        if(!isInt(jobId)){
+            jobId = 1;
+            history.push('/ui-components/view-job/1');
+        }
+
         var requestOptions = {
             method: 'GET',
             redirect: 'follow'
         };
 
-        console.log('props', localStorage.getItem('jobId'));
-
-        fetch(SERVER_URL+"/job/insights/1", requestOptions)
+        fetch(SERVER_URL+"/job/insights/"+jobId, requestOptions)
         .then(response => response.json())
         .then(result => {
             let eleList = [];
@@ -55,12 +71,16 @@ const ViewJob = (props) => {
             result.map(v => {
                 let json = JSON.parse(v.jsonText);
 
-                console.log(json);
-
                 let wordsLi = convertFn(json.keywords);
 
-                eleList.push(<Source key={json.source} sentiment={json.sentiment} words={wordsLi} type={json.source} 
-                    count={15} items={json.items} />);
+                let ele = <Source key={json.source} sentiment={json.sentiment} words={wordsLi} type={json.source} 
+                    count={json.count} items={json.items} />;
+
+                if(json.source == 'aggregated'){
+                    eleList.unshift(ele);
+                }else{
+                    eleList.push(ele);
+                }
             });
 
             setRows(eleList);

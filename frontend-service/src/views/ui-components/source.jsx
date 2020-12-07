@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { PieChart } from 'react-minimal-pie-chart';
 import ReactWordcloud from 'react-wordcloud';
 import {
@@ -31,7 +31,9 @@ const Source = (props) => {
 
     const [source, setSource] = useState('');
 
-    const toggle = () => setModal(!modal);
+    const toggle = () => {
+        setModal(!modal);
+    }
 
     const options = {
         rotations: 2,
@@ -52,15 +54,17 @@ const Source = (props) => {
         }
     }
 
+    const createRow = (arr) => <tr>{arr.map(k => <td>{k}</td>)}</tr>;
+
     return (
         <div>
             <Row className="mb-3">
                 <Col xs="12" md="1">
                     <h5 >{getContent(props.type)[0]}</h5>
                 </Col>
-                {/* <Col xs="12" md="2">
-                    <Button color="danger" onClick={toggle}>{buttonLabel}</Button>
-                </Col> */}
+                <Col xs="12" md="2">
+                    {props.source != 'aggregated' && <Button color="danger" onClick={toggle}>view data</Button>}
+                </Col>
             </Row>
             <Row>
                 <Col xs="12" md="4" >
@@ -75,9 +79,9 @@ const Source = (props) => {
                             <CardTitle>Sentiments</CardTitle>
                             <PieChart
                                 data={[
-                                    { title: '+ve', value: props.sentiment.positive, color: '#43a047' },
-                                    { title: '-ve', value: props.sentiment.negative, color: '#f4511e' },
-                                    { title: '0', value: props.sentiment.neutral, color: '#fdd835' },
+                                    { title: 'positive', value: props.sentiment.positive, color: '#43a047' },
+                                    { title: 'negative', value: props.sentiment.negative, color: '#f4511e' },
+                                    { title: 'neutral', value: props.sentiment.neutral, color: '#fdd835' },
                                 ]}
                                 //label={({ dataEntry }) => dataEntry.title}
                                 style={{width: "70%"}}
@@ -95,25 +99,49 @@ const Source = (props) => {
                     </Card>
                 </Col>
             </Row>
-            {/* <Modal isOpen={modal} toggle={toggle} className={"modal-lg"}>
-                <ModalHeader toggle={toggle}>Text</ModalHeader>
+            <Modal isOpen={modal} toggle={toggle} className={"modal-lg"} style={{maxWidth: '1200px'}}>
+                <ModalHeader toggle={toggle}>Data</ModalHeader>
                 <ModalBody>
                     <Table>
                         <thead>
                             <tr>
+                                <th>#</th>
                                 {Object.keys(props.items[0]).map(v => <th>{v}</th>)}
                             </tr>
                         </thead>
                         <tbody>
-                            {props.map(v => {
+                            {props.items.map((v, i) => {
+                                //console.log('index', i);
+                                // let key = Object.keys(props.items[0])[i];
+
+                                let arr = [i+1];
+
                                 Object.keys(v).forEach(function(key) {
-                                return <tr>{v[key]}</tr> });
-                                })
-                            }
+                                    let obj = v[key];
+                                    if(!Array.isArray(obj) && typeof obj !== 'object'){
+                                        if(key === "link"){
+                                            arr.push(<a target="_blank" href={obj}>{obj}</a>)
+                                        }else{
+                                            arr.push(obj);
+                                        }
+                                    }else{
+                                        arr.push("");
+                                    }
+                                });
+
+                                return createRow(arr);
+
+                                // if(typeof key !== 'undefined' && key in v && !Array.isArray(v[key]) 
+                                //     && typeof v[key] !== 'object'){
+                                //     //console.log(key, v[key]);
+
+                                //     return <td>{v[key]}</td>;
+                                // }
+                            })}
                         </tbody>
                     </Table>
                 </ModalBody>
-            </Modal> */}
+            </Modal>
         </div>
     )
 }

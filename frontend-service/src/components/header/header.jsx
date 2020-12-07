@@ -116,13 +116,9 @@ const Header = () => {
                         {/*--------------------------------------------------------------------------------*/}
                         <UncontrolledDropdown nav inNavbar>
                             <DropdownToggle nav caret className="pro-pic">
-                                <a
-                                    href="https://wrappixel.com/templates/materialpro-react-admin/"
-                                    className="btn btn-danger"
-                                    style={{ marginTop: '5px' }}
-                                >
-                                    Export
-                                </a>
+                                
+                                Export
+                                
                             </DropdownToggle>
                             <DropdownMenu right className="user-dd">
                                 <DropdownItem>

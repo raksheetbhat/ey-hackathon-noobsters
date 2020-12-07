@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useHistory } from 'react-router-dom';
 
 import img1 from '../../../assets/images/users/1.jpg';
 import img2 from '../../../assets/images/users/2.jpg';
@@ -18,6 +19,8 @@ import { SERVER_URL } from "../../../Constants";
 const Projects = () => {
 
     const [jobs, setJobs] = useState([]);
+    
+    const history = useHistory();
 
     useEffect(() => {
         fetchJobs();
@@ -40,18 +43,12 @@ const Projects = () => {
                 
                 let li = []
                 result.map(v => {
-                    li.push(<JobRow job={v} />);
+                    li.push(<JobRow job={v} key={v.id} />);
                 });
 
                 setJobs(li);
             })
             .catch(error => console.log('error', error));
-    }
-
-    const btnHandler = (jobId) => {
-        console.log('on click', jobId);
-        localStorage.setItem('jobId', jobId);
-        window.location.href = 'http://localhost:3000/ui-components/view-job';
     }
 
     const JobRow = ({job}) => {
@@ -63,7 +60,7 @@ const Projects = () => {
                     <i className="fa fa-circle text-warning" id="tlp1"></i>}</td>
                 <td>{job.dataSources}</td>
                 <td>
-                <button onClick={btnHandler.bind(this, job.id)}>Click</button>
+                <button onClick={() => history.push('/ui-components/view-job/'+job.id)}>Insights</button>
                 </td>
             </tr>
         )
