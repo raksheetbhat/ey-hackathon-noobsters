@@ -3,6 +3,9 @@ import json
 from flask import Flask
 app = Flask(__name__)
 
+# ["twitter","news","youtube","website","linkedin"]
+
+
 data = [{
 
         "job_id": 1,
@@ -10,22 +13,27 @@ data = [{
         "start_date": "2020-11-25",
         "end_date": "",
         "goal": "competitive_analysis",
-        "data_sources": ["twitter","news","youtube"],
+        "data_sources": ["youtube","website","news","twitter","linkedin"],
         "domain": "supply chain",
         "company_name": "BCG",
         "company_url": "www.bcg.com",
         "status": "submitted"
-    }, {
-        "job_id": 2,
-        "job_name": "Trends in Supply chain",
-        "start_date": "2020-11-25",
-        "end_date": "",
-        "goal": "emerging_trends",
-        "data_sources": ["twitter","search","news","youtube"],
-        "domain": "Blockchain",
-        "status": "submitted"
     }
 ]
+
+
+# {
+#         "job_id": 2,
+#         "job_name": "Trends in Supply chain",
+#         "start_date": "2020-11-25",
+#         "end_date": "",
+#         "goal": "emerging_trends",
+#         "data_sources": ["twitter"],
+#         "domain": "Blockchain",
+#         "status": "submitted"
+#     }
+
+# data = []
 
 
 @app.route('/')

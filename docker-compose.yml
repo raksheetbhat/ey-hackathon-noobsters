@@ -1,51 +1,59 @@
 version: '3.8'
 
 services:
-  # postgres:
-  #   image: postgres
-  #   environment:
-  #     - POSTGRES_USER=airflow
-  #     - POSTGRES_PASSWORD=airflow
-  #     - POSTGRES_DB=airflow
-  # webserver:
-  #   build: ./airflow
-  #   entrypoint: ./airflow/scripts/entrypoint_webserver.sh
-  #   deploy:
-  #     replicas: 1
-  #   restart: on-failure:1
-  #   depends_on:
-  #     - postgres
-  #   env_file:
-  #     - ./airflow/.env
-  #   volumes:
-  #     - ./airflow/dags:/opt/airflow/dags
-  #     - ./airflow/logs:/opt/airflow/logs
-  #     - ./airflow/plugins:/opt/airflow/plugins
-  #     - ./airflow/scripts:/opt/airflow/scripts
-  #     - ./airflow/data:/opt/airflow/data
-  #     - ./airflow/requirements.txt:/opt/airflow/requirements.txt
-  #   ports:
-  #     - "8080:8080"
+  postgres:
+    image: postgres
+    container_name: postgres
+    environment:
+      - POSTGRES_USER=airflow
+      - POSTGRES_PASSWORD=airflow
+      - POSTGRES_DB=airflow
+  webserver:
+    build: ./airflow
+    container_name: airflow-webserver
+    entrypoint: ./airflow/scripts/entrypoint_webserver.sh
+    deploy:
+      replicas: 1
+    restart: on-failure:1
+    depends_on:
+      - postgres
 
-  # scheduler:
-  #   build: ./airflow
-  #   entrypoint: ./airflow/scripts/entrypoint_scheduler.sh
-  #   restart: on-failure:1
-  #   depends_on:
-  #     - postgres
-  #     - webserver
-  #   env_file:
-  #     - ./airflow/.env
-  #   volumes:
-  #     - ./airflow/dags:/opt/airflow/dags
-  #     - ./airflow/logs:/opt/airflow/logs
-  #     - ./airflow/plugins:/opt/airflow/plugins
-  #     - ./airflow/scripts:/opt/airflow/scripts
-  #     - ./airflow/data:/opt/airflow/data
-  #     - ./airflow/requirements.txt:/opt/airflow/requirements.txt
+    env_file:
+      - ./airflow/.env
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - ./airflow/logs:/opt/airflow/logs
+      - ./airflow/plugins:/opt/airflow/plugins
+      - ./airflow/scripts:/opt/airflow/scripts
+      - ./airflow/data:/opt/airflow/data
+      - ./airflow/requirements.txt:/opt/airflow/requirements.txt
+    ports:
+      - "8080:8080"
+
+  scheduler:
+    build: ./airflow
+    container_name: airflow-scheduler
+    entrypoint: ./airflow/scripts/entrypoint_scheduler.sh
+    restart: on-failure:1
+    deploy:
+      replicas: 1
+    depends_on:
+      - postgres
+      - webserver
+
+    env_file:
+      - ./airflow/.env
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - ./airflow/logs:/opt/airflow/logs
+      - ./airflow/plugins:/opt/airflow/plugins
+      - ./airflow/scripts:/opt/airflow/scripts
+      - ./airflow/data:/opt/airflow/data
+      - ./airflow/requirements.txt:/opt/airflow/requirements.txt
 
   docker-mysql:
     image: mysql:latest
+    container_name: mysql
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_DATABASE=ey_hackathon
@@ -53,6 +61,7 @@ services:
 
   backend-java-service:
     build: ./backend-java-service
+    container_name: backend
     depends_on:
       - docker-mysql
     expose:
@@ -68,25 +77,13 @@ services:
       - DATABASE_NAME=ey_hackathon  
       - DATABASE_PORT=3306
 
-  # backend-service:
-  #   build: ./backend-service
-  #   expose:
-  #     - "5000"
-  #   ports:
-  #     - "5000:5000"
-  #   volumes:
-  #     - ./backend-service:/usr/src/app
-  #   environment:
-  #     - FLASK_ENV=development
-  #     - FLASK_APP=flask-app.py
-  #     - FLASK_DEBUG=1
-
-  # frontend-service:
-  #   build: ./frontend-service
-  #   expose:
-  #     - "3000"
-  #   ports:
-  #     - "3000:3000"
-  #   volumes:
-  #     - ./frontend-service/src:/app/src
-  #     - ./frontend-service/public:/app/public
+  frontend-service:
+     build: ./frontend-service
+     container_name: ui
+     expose:
+       - "3000"
+     ports:
+       - "3000:3000"
+     volumes:
+       - ./frontend-service/src:/app/src
+       - ./frontend-service/public:/app/public

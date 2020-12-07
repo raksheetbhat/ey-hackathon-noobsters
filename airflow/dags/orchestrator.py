@@ -6,27 +6,20 @@ from datetime import datetime
 
 import helper
 
-# output = [{
-#
-#         "job_id": 1,
-#         "job_name": "BCG Analysis",
-#         "start_date": "2020-11-25",
-#         "end_date": "",
-#         "goal": "competitive_analysis",
-#         "data_sources": ["twitter","website","news","youtube"],
-#         "domain": "supply chain",
-#         "company_name": "BCG",
-#         "company_url": "www.bcg.com",
-#         "status": "submitted"
-#     }, {
-#         "job_id": 2,
-#         "job_name": "Trends in Supply chain",
-#         "start_date": "2020-11-25",
-#         "end_date": "",
-#         "goal": "emerging_trends",
-#         "data_sources": ["twitter","search","news","youtube"],
+# output = [
+#     {
+#         "id": 3,
+#         "version": 0,
+#         "created": "2020-12-06T18:14:51",
+#         "jobName": "BCG blochchain Job",
+#         "startDate": "2020-12-31T00:00:00",
+#         "endDate": "2021-01-09T00:00:00",
+#         "goal": "1",
+#         "dataSources": ["twitter","news","linkedin"],
 #         "domain": "Blockchain",
-#         "status": "submitted"
+#         "companyName": "BCG",
+#         "companyUrl": "",
+#         "status": 1
 #     }
 # ]
 
@@ -34,9 +27,9 @@ import helper
 def create_dag(task):
 
     dag = DAG(
-            str(task["job_name"]).replace(" ", "_") + "_" +str(task["job_id"]),
+            str(task["jobName"]).replace(" ", "_") + "_" + str(task["id"]),
             is_paused_upon_creation=False,
-            description=task["job_name"],
+            description=task["jobName"],
             schedule_interval='@once',
             start_date=datetime(2020, 12, 1),
             catchup=False)
@@ -46,7 +39,7 @@ def create_dag(task):
                             retries=3,
                             dag=dag)
 
-    create_data_repository = PythonOperator(task_id='python_task',
+    create_data_repository = PythonOperator(task_id='initialize_repositories',
                                             python_callable=helper.create_repos, op_kwargs={'task': task})
 
     operators = helper.construct_dag(task, dag)
@@ -60,7 +53,8 @@ output = helper.fetch_tasks()
 
 # Get request from server
 for task in output:
-    dag_id = str(task["job_name"]).replace(" ","_") + str(task["job_id"])
+    dag_id = str(task["jobName"]).replace(" ","_") + str(task["id"])
     globals()[dag_id] = create_dag(task)
 
-    # update server that task is in progress
+    # helper.update_task_status(task["id"],2)
+
