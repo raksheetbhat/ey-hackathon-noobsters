@@ -8,14 +8,16 @@ access_token_secret= 'OTfiF1gjGo9unsmiNAaAyC5S5O5QIIta9Zefh66ZQXLQM'
 
 
 TWEET_SCHEMA = {
-    "id":"",
+    "link":"",
     "full_text" : "",
     "retweet_count": "",
     "favorite_count": ""
 }
 
 
-def get_tweets(keyword,date_since):
+def get_tweets(keyword, date_since):
+
+    print("Pulling tweets for : " + keyword)
 
     auth = tw.OAuthHandler(consumer_key, consumer_secret)
     auth.set_access_token(access_token, access_token_secret)
@@ -31,9 +33,10 @@ def get_tweets(keyword,date_since):
                            lang="en",
                            result_type='popular',
                            tweet_mode='extended',
+                           since='2020-11-01',
                            count=50).items(50)
 
-    # since = date_since
+    #
 
     except Exception as e:
         print(e)
@@ -41,26 +44,31 @@ def get_tweets(keyword,date_since):
 
     print("Collected some tweets")
 
-    try:
-        # Iterate and print tweets
-        for tweet in tweets:
-            # print(tweet.full_text)
-            # print(tweet.retweet_count)
-            # print(tweet.favorite_count)
+    count = 0
+
+    # Iterate and print tweets
+    for tweet in tweets:
+        try:
             # print(tweet.id)
+            # print(tweet.retweet_count)
 
             parsed_tweet = copy.deepcopy(TWEET_SCHEMA)
 
-            parsed_tweet["id"] = tweet.id
+            parsed_tweet["link"] = "https://twitter.com/twitter/statuses/" + str(tweet.id)
             parsed_tweet["full_text"] = tweet.full_text
             parsed_tweet["retweet_count"] = tweet.retweet_count
             parsed_tweet["favorite_count"] = tweet.favorite_count
 
             output.append(parsed_tweet)
+            count += 1
 
-    except Exception as e:
-        print(e)
+        except Exception as e:
+            print(e)
+    print(count)
+    print(output)
 
     return output
 
-# get_tweets('supply chain','2020-11-25')
+#
+# #
+get_tweets('Supply chain','')

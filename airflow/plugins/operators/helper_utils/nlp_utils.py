@@ -118,7 +118,7 @@ def analyze_tweets(tweets, insights, stop_words):
 
         tweet_insight = copy.deepcopy(TWEET_SCHEMA)
 
-        tweet_insight["link"] = tweet["id"]
+        tweet_insight["link"] = tweet["link"]
         tweet_insight["text"] = tweet["full_text"]
         tweet_insight["retweet_count"] = tweet["retweet_count"]
         tweet_insight["favorite_count"] = tweet["favorite_count"]
@@ -191,8 +191,8 @@ def analyze_videos(videos, insights, stop_words):
 
     for video in videos:
 
-        if len(video["transcript"]) < 50:
-            continue
+        # if len(video.get("transcript", 0)) < 50:
+        #     continue
 
         video_insight = copy.deepcopy(VIDEO_SCHEMA)
 
@@ -203,16 +203,17 @@ def analyze_videos(videos, insights, stop_words):
         video_insight["channel"] = video["channel"]
         video_insight["published"] = video["published"]
 
-        sentiment = get_sentiment(video["transcript"])
+        if video.get("transcript") is not None:
+            sentiment = get_sentiment(video["transcript"])
 
-        sentiments[SENTIMENT_LOOKUP[str(sentiment)]] += 1
+            sentiments[SENTIMENT_LOOKUP[str(sentiment)]] += 1
 
-        video_insight["sentiment"] = sentiment
-        video_insight["keywords"] = get_keywords(video["transcript"], stop_words)
+            video_insight["sentiment"] = sentiment
+            video_insight["keywords"] = get_keywords(video["transcript"], stop_words)
+            text += " " + video["transcript"]
 
         insights["items"].append(video_insight)
 
-        text += " " + video["transcript"]
         count += 1
 
     keywords = get_keywords(text, stop_words)

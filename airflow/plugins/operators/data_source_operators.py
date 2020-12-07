@@ -32,7 +32,21 @@ class TwitterDataCollector(BaseOperator):
         log.info("Some process happens here")
         log.info(self.data)
 
-        output = get_tweets(self.data["domain"], self.data["startDate"])
+        keyword = ""
+
+        company_name = ""
+        domain = self.data.get("domain")
+
+        if company_name is not None and company_name != "":
+            keyword += company_name + " "
+
+            if domain is not None and domain != "":
+                keyword += domain
+
+        else:
+            keyword += domain
+
+        output = get_tweets(keyword, "")
 
         if output is not None:
             write_data(output, self.data["id"], "source", "twitter")
@@ -57,7 +71,21 @@ class LinkedinDataCollector(BaseOperator):
         log.info("Some process happens here")
         log.info(self.data)
 
-        output = get_linkedin_results(self.data["domain"])
+        keyword = ""
+
+        company_name = self.data.get("companyName")
+        domain = self.data.get("domain")
+
+        if company_name is not None and company_name != "":
+            keyword += company_name + " "
+
+            if domain is not None and domain != "":
+                keyword += domain
+
+        else:
+            keyword += domain
+
+        output = get_linkedin_results(keyword)
 
         if output is not None:
             write_data(output, self.data["id"],"source", "linkedin")
@@ -124,7 +152,7 @@ class YouTubeDataCollector(BaseOperator):
                 keyword += domain
 
         else:
-            keyword += "latest trends in " + domain
+            keyword += domain
 
         output = get_youtube_videos(keyword)
 
@@ -152,7 +180,21 @@ class NewsDataCollector(BaseOperator):
 
         log.info(self.data)
 
-        output = get_news_articles(self.data["domain"])
+        keyword = ""
+
+        company_name = self.data.get("companyName")
+        domain = self.data.get("domain")
+
+        if company_name is not None and company_name != "":
+            keyword += company_name + " "
+
+            if domain is not None and domain != "":
+                keyword += domain
+
+        else:
+            keyword += domain
+
+        output = get_news_articles(keyword)
 
         if output is not None:
             write_data(output, self.data["id"],"source", "news")

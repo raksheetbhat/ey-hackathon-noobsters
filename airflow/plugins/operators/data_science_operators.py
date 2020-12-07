@@ -17,9 +17,9 @@ log = logging.getLogger(__name__)
 
 INSIGHTS_SCHEMA = {
     "source": "",
-    "count": "",
-    "sentiment": "",
-    "keywords": [],
+    "count": 0,
+    "sentiment": {"positive": 0, "negative": 0, "neutral": 0},
+    "keywords": {},
     "items": []
 }
 
